@@ -4,7 +4,7 @@ import utils
 
 def GenerateLabel(data_path, name_list_path, label_dic_path):
     with open(data_path, "r") as csvfile:
-        data = list(csv.reader(csvfile))
+        data = list(csv.reader(csvfile))[1:]
 
     name_list = []
     label_dic = {}
@@ -45,19 +45,19 @@ def StatisticSamples(test_label_dic_path, statistic_name_dic_path):
         statistic_name_dic[test_label_dic[name]].append(name)
     utils.WriteJson(statistic_name_dic, statistic_name_dic_path)
     
-def JudgeSituation15(test_name_list_path):
-    test_name_list = utils.ReadJson(test_name_list_path)
-    for name in test_name_list:
-        vec = utils.GetVec(utils.embedded_dir_1, name)
-        if vec[14] != 0:
-            print(name)
+# def JudgeSituation15(test_name_list_path):
+#     test_name_list = utils.ReadJson(test_name_list_path)
+#     for name in test_name_list:
+#         vec = utils.GetVec(utils.embedded_dir_1, name)
+#         if vec[14] != 0:
+#             print(name)
         
 
 if __name__ == '__main__':
     classify_basic_data_path = utils.classify_basic_data_path
     
-    train_data_path = classify_basic_data_path + "train_data.csv"
-    test_data_path = classify_basic_data_path + "test_data.csv"
+    train_data_path = classify_basic_data_path + "classify_train_data.csv"
+    test_data_path = classify_basic_data_path + "classify_test_data.csv"
     train_name_list_path = classify_basic_data_path + "train_name_list.json"
     test_name_list_path = classify_basic_data_path + "test_name_list.json"
     train_label_dic_path = classify_basic_data_path + "train_label_dic.json"

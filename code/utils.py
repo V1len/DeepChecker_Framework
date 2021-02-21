@@ -15,33 +15,30 @@ choose_top_method_number_1 = 1
 choose_top_method_number_2 = 2
 sum_method_number = len(method_list)
 
-date = "2021-1-26-best-classify"
-# date = "2021-1-26-time"
-# date = "2021-1-29"
 
-root_path = "/mnt/hd0/DeepChecker/DataForNet/" + date + "/"
-if not os.path.exists(root_path):
-    os.mkdir(root_path)
+AVY_dprove_path = "/Users/zhujiayi/Desktop/dataset/2020-1-18/AVY_dprove_clean.json"
+pdr_IC3_path = "/Users/zhujiayi/Desktop/dataset/2020-1-18/pdr_IC3_clean.json"
+# iimc_path = "/mnt/hd0/DeepChecker/dataset/2020-1-26/clean_iimc.json"
+others_path = "/Users/zhujiayi/Desktop/dataset/2020-1-12/others.json"
+# hwmcc_clean_path = "/mnt/hd0/DeepChecker/dataset/2020-1-22/hwmcc_clean.json"
 
-tools_path = root_path + "tools/"
-iimc_path = root_path + "iimc/"
-if not os.path.exists(tools_path):
-    os.mkdir(tools_path)
-if not os.path.exists(iimc_path):
-    os.mkdir(iimc_path)
+# iimc_benchmark_path = "/mnt/hd0/DeepChecker/dataset/2021-1-19/iimc_benchmark.json"
 
-if use_all_methods:
-    basic_path = tools_path
-else:
-    basic_path = iimc_path
+encoding_log_path_0 = "/Users/zhujiayi/Desktop/embedding/embedding_0.log"
+encoding_log_path_1 = "/Users/zhujiayi/Desktop/embedding/embedding_1.log"
+encoding_log_path_2 = "/Users/zhujiayi/Desktop/embedding/embedding_2.log"
+# encoding_aig_path = "/mnt/hd0/DeepChecker/StatisticAvgEncodingTime/networks/"
+# encoding_aag_path = "/mnt/hd0/DeepChecker/networks_aag/"
 
-classify_task_path = basic_path + "classify/"
-time_task_path = basic_path + "time/"
-if not os.path.exists(classify_task_path):
-    os.mkdir(classify_task_path)
-if not os.path.exists(time_task_path):
-    os.mkdir(time_task_path)
+encoding_dir = "/Users/zhujiayi/Desktop/embedding/"
+encoding_dir_0 = "/Users/zhujiayi/Desktop/embedding/embedding/2021-1-2_v0.1"
+encoding_dir_1 = "/Users/zhujiayi/Desktop/embedding/embedding/2020-12-24_v1.1"
+encoding_dir_2 = "/Users/zhujiayi/Desktop/embedding/embedding/2021-1-2_v2.2"
+encoding_dic_dir_0 = "/Users/zhujiayi/Desktop/embedding/embedding/encoding_dic_0"
+encoding_dic_dir_1 = "/Users/zhujiayi/Desktop/embedding/embedding/encoding_dic_1"
+encoding_dic_dir_2 = "/Users/zhujiayi/Desktop/embedding/embedding/encoding_dic_2"
 
+classify_task_path = "../classify/"
 classify_model_path = classify_task_path + "classify_model/"
 classify_predict_path = classify_task_path + "classify_predict/"
 importance_message_path = classify_task_path + "importance_message/"
@@ -50,52 +47,28 @@ statistic_sample_distribution_path = classify_task_path + "statistic_sample_dist
 classify_basic_data_path = classify_task_path + "basic_data/"
 classify_result_path = classify_task_path + "result/"
 
+def MakeClassifyDir():
+    if not os.path.exists(classify_task_path):
+        os.mkdir(classify_task_path)   
+    path_list = [classify_model_path, classify_predict_path, importance_message_path, importance_fig_path,
+                    statistic_sample_distribution_path, classify_basic_data_path, classify_result_path]
+    for temp_path in path_list:
+        if not os.path.exists(temp_path):
+            os.mkdir(temp_path)
+
+time_task_path = "../time/"
 time_model_path = time_task_path + "time_model/"
 time_predict_path = time_task_path + "time_predict/"
 time_basic_data_path = time_task_path + "basic_data/"
 time_result_path = time_task_path + "result/"
 
-path_list = [classify_model_path, classify_predict_path, importance_message_path, importance_fig_path,
-                    statistic_sample_distribution_path, classify_basic_data_path, classify_result_path,
-                            time_model_path, time_predict_path, time_basic_data_path, time_result_path]
-for temp_path in path_list:
-    if not os.path.exists(temp_path):
-        os.mkdir(temp_path)
-
-# AVY_dprove_path = "/mnt/hd0/DeepChecker/dataset/2021-1-6/AVY_dprove_clean.json"
-# AVY_dprove_path = "/mnt/hd0/DeepChecker/DataForNet/2021-1-10/data_clean.json"
-AVY_dprove_path = "/mnt/hd0/DeepChecker/dataset/2020-1-18/AVY_dprove_clean.json"
-pdr_IC3_path = "/mnt/hd0/DeepChecker/dataset/2020-1-18/pdr_IC3_clean.json"
-# iimc_path = "/mnt/hd0/DeepChecker/dataset/2020-1-18/iimc_clean.json"
-iimc_path = "/mnt/hd0/DeepChecker/dataset/2020-1-26/clean_iimc.json"
-others_path = "/mnt/hd0/DeepChecker/dataset/2020-1-12/others.json"
-hwmcc_clean_path = "/mnt/hd0/DeepChecker/dataset/2020-1-22/hwmcc_clean.json"
-
-# iimc_benchmark_path = "/mnt/hd0/DeepChecker/dataset/2021-1-8/iimc_benchmark.json"
-iimc_benchmark_path = "/mnt/hd0/DeepChecker/dataset/2021-1-19/iimc_benchmark.json"
-new_format_json_path = "/mnt/hd0/DeepChecker/new_format.json"
-
-encoding_log_path_0 = "/mnt/hd0/DeepChecker/StatisticAvgEncodingTime/embedding_0.log"
-encoding_log_path_1 = "/mnt/hd0/DeepChecker/StatisticAvgEncodingTime/embedding_1.log"
-encoding_log_path_2 = "/mnt/hd0/DeepChecker/StatisticAvgEncodingTime/embedding_2.log"
-encoding_aig_path = "/mnt/hd0/DeepChecker/StatisticAvgEncodingTime/networks/"
-encoding_aag_path = "/mnt/hd0/DeepChecker/networks_aag/"
-
-
-embedding_date_0 = "2021-1-2_v0.1"
-embedding_date_1 = "2020-12-24_v1.1"
-# embedding_date_2 = "2021-1-2_v2.2"
-
-embedding_date_2 = "2020-1-28_v2.2"
-
-# embedding_date_0 = "2020-12-11_v0"
-# embedding_date_1 = "2020-12-24_v1.1"
-# embedding_date_2 = "2020-12-24_v2.1"
-
-embedded_dir_0 = "/mnt/hd0/DeepChecker/embedding/embedded/" + embedding_date_0
-embedded_dir_1 = "/mnt/hd0/DeepChecker/embedding/embedded/" + embedding_date_1
-embedded_dir_2 = "/mnt/hd0/DeepChecker/embedding/embedded/" + embedding_date_2
-
+def MakeTimeDir():    
+    if not os.path.exists(time_task_path):
+        os.mkdir(time_task_path)
+    path_list = [time_model_path, time_predict_path, time_basic_data_path, time_result_path]
+    for temp_path in path_list:
+        if not os.path.exists(temp_path):
+            os.mkdir(temp_path)
 
 def WriteJson(my_json, json_path):
     with open(json_path, 'w')as file_obj:

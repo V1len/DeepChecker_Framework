@@ -238,20 +238,22 @@ if __name__ == '__main__':
     AVY_dprove_path = utils.AVY_dprove_path
     pdr_IC3_path = utils.pdr_IC3_path
     others_path = utils.others_path
-    iimc_path = utils.iimc_path
-    iimc_benchmark_path = utils.iimc_benchmark_path
-    hwmcc_clean_path = utils.hwmcc_clean_path
+    # iimc_path = utils.iimc_path
+    # iimc_benchmark_path = utils.iimc_benchmark_path
+    # hwmcc_clean_path = utils.hwmcc_clean_path
 
-    data_path = utils.classify_basic_data_path + "data.csv"
+    data_path = utils.classify_basic_data_path + "classify_data.csv"
+    ProcessData(AVY_dprove_path, pdr_IC3_path, others_path, data_path)
+
     # train_path = utils.classify_basic_data_path + "train_data.csv"
     # test_path = utils.classify_basic_data_path + "test_data.csv"
 
-    if utils.use_all_methods:
-        # ProcessDataForBenchmark(AVY_dprove_path, pdr_IC3_path, others_path, hwmcc_clean_path, train_path, test_path)
-        ProcessData(AVY_dprove_path, pdr_IC3_path, others_path, data_path)
-        # FinalProcessData(AVY_dprove_path, pdr_IC3_path, iimc_path, data_path)
-    else:
-        ProcessiimcData(iimc_benchmark_path, data_path)
+    # if utils.use_all_methods:
+    #     # ProcessDataForBenchmark(AVY_dprove_path, pdr_IC3_path, others_path, hwmcc_clean_path, train_path, test_path)
+    #     ProcessData(AVY_dprove_path, pdr_IC3_path, others_path, data_path)
+    #     # FinalProcessData(AVY_dprove_path, pdr_IC3_path, iimc_path, data_path)
+    # else:
+    #     ProcessiimcData(iimc_benchmark_path, data_path)
 
     # ProcessData(AVY_dprove_path, pdr_IC3_path, others_path, data_path)
     # FinalProcessData(AVY_dprove_path, pdr_IC3_path, iimc_path, data_path)

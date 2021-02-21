@@ -48,24 +48,11 @@ def RandomForest(layer, embedded_dir, train_name_list, test_name_list, train_lab
     train_vec_list = utils.GetVecList(embedded_dir, train_name_list)
     test_vec_list = utils.GetVecList(embedded_dir, test_name_list)
 
-    # param_test1= {"max_leaf_nodes":range(10,200,5)}
-    # gsearch1= GridSearchCV(estimator = RandomForestClassifier(n_estimators=100, criterion="entropy", max_features=None),
-    #                    param_grid =param_test1,cv=5)
-    # gsearch1.fit(train_vec_list, train_label_list)
-    # print(gsearch1.cv_results_,gsearch1.best_params_, gsearch1.best_score_)
-    # a==1
-
     model = RandomForestClassifier(n_estimators=100, criterion="entropy", max_depth=None, min_samples_split=min_samples_split, 
                                     min_samples_leaf=min_samples_leaf, max_leaf_nodes=max_leaf_nodes, max_features=None)
     classifier = model.fit(train_vec_list, train_label_list)
     utils.Save_pkl(classifier, model_path)
     
-    # train_predictions = classifier.predict_proba(train_vec_list)
-    # train_predict_label_list = np.argsort(-train_predictions, axis=1)
-    # sum_acc = GetAcc(train_predict_label_list, train_label_list)
-    # print("train")
-    # print(sum_acc)
-    # classify_train_predict = GeneratePredictResult(train_name_list, train_predict_label_list, classify_train_predict_path)
 
     predictions = classifier.predict_proba(test_vec_list)
     predict_label_list = np.argsort(-predictions, axis=1)
@@ -77,30 +64,7 @@ def RandomForest(layer, embedded_dir, train_name_list, test_name_list, train_lab
     sum_acc = GetAcc(predict_label_list, test_label_list, utils.choose_top_method_number_2)
     print(sum_acc)
     classify_predict = GeneratePredictResult(test_name_list, predict_label_list, classify_predict_path)
-    Statistic(test_name_list, classify_predict)
-    # class_names = []
-    # for label in train_label_list:
-    #     class_names.append(str(label))
-    # trees = model.estimators_
-    # dot_data = tree.export_graphviz(trees[20],
-    #                         out_file = None,
-    #                         feature_names = list(range(len(train_vec_list[0]))),
-    #                         class_names = class_names,
-    #                         filled = True,
-    #                         rounded = True
-    #                         )
-    # graph = pydotplus.graph_from_dot_data(dot_data)
-    # graph.write_pdf(utils.classify_result_path + layer + ".pdf")
 
-def Statistic(test_name_list, classify_predict):
-    new_format = utils.ReadJson(utils.new_format_json_path)
-    result = {}
-    for name in test_name_list:
-        if name in new_format:
-            result[name] = classify_predict[name][0]
-    if len(result.keys()) != 0:
-        statistic_dic = utils.Statistic([result])
-        print(statistic_dic)
 
 
 if __name__ == '__main__':
