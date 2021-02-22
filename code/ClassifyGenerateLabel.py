@@ -22,6 +22,7 @@ def GenerateLabel(data_path, name_list_path, label_dic_path):
             print(line[0])
     utils.WriteJson(name_list, name_list_path)
     utils.WriteJson(label_dic, label_dic_path)
+    return name_list, label_dic
 
 def Statistic(train_label_dic_path, test_label_dic_path):
     train_label_dic = utils.ReadJson(train_label_dic_path)
@@ -51,17 +52,26 @@ def StatisticSamples(test_label_dic_path, statistic_name_dic_path):
 #         vec = utils.GetVec(utils.embedded_dir_1, name)
 #         if vec[14] != 0:
 #             print(name)
-        
+
+def ClassifyGenerateLabel(classify_data_path, stage):
+    if stage == "train":
+        classify_name_list_path = utils.classify_basic_data_path + "classify_train_name_list.json"
+        classify_label_dic_path = utils.classify_basic_data_path + "classify_train_label_dic.json"
+    elif stage == "test":
+        classify_name_list_path = utils.classify_basic_data_path + "classify_test_name_list.json"
+        classify_label_dic_path = utils.classify_basic_data_path + "classify_test_label_dic.json"
+    name_list, label_dic = GenerateLabel(classify_data_path, classify_name_list_path, classify_label_dic_path)
+    return name_list, label_dic
 
 if __name__ == '__main__':
     classify_basic_data_path = utils.classify_basic_data_path
     
     train_data_path = classify_basic_data_path + "classify_train_data.csv"
     test_data_path = classify_basic_data_path + "classify_test_data.csv"
-    train_name_list_path = classify_basic_data_path + "train_name_list.json"
-    test_name_list_path = classify_basic_data_path + "test_name_list.json"
-    train_label_dic_path = classify_basic_data_path + "train_label_dic.json"
-    test_label_dic_path = classify_basic_data_path + "test_label_dic.json"
+    train_name_list_path = classify_basic_data_path + "classify_train_name_list.json"
+    test_name_list_path = classify_basic_data_path + "classify_test_name_list.json"
+    train_label_dic_path = classify_basic_data_path + "classify_train_label_dic.json"
+    test_label_dic_path = classify_basic_data_path + "classify_test_label_dic.json"
 
     statistic_name_dic_path = classify_basic_data_path + "statistic_name_dic.json"
 

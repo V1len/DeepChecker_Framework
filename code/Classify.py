@@ -2,7 +2,6 @@ from sklearn.ensemble import RandomForestClassifier
 import utils
 import os
 import numpy as np
-import pydotplus
 from sklearn import tree
 from sklearn.model_selection import GridSearchCV
 
@@ -43,8 +42,7 @@ def GetAcc(predict_label_list, test_label_list, choose_top_method_number):
     return sum_acc
     
 def RandomForest(layer, embedded_dir, train_name_list, test_name_list, train_label_list, test_label_list, classify_predict_path,
-                 classify_train_predict_path, model_path, importance_path, 
-                 max_depth, max_leaf_nodes, min_samples_split=2, min_samples_leaf=1):
+                model_path, importance_path, max_depth, max_leaf_nodes, min_samples_split=2, min_samples_leaf=1):
     train_vec_list = utils.GetVecList(embedded_dir, train_name_list)
     test_vec_list = utils.GetVecList(embedded_dir, test_name_list)
 
@@ -64,6 +62,26 @@ def RandomForest(layer, embedded_dir, train_name_list, test_name_list, train_lab
     sum_acc = GetAcc(predict_label_list, test_label_list, utils.choose_top_method_number_2)
     print(sum_acc)
     classify_predict = GeneratePredictResult(test_name_list, predict_label_list, classify_predict_path)
+
+def Classify(name_list, label_dic, layer, n_estimators, max_depth, max_leaf_nodes, min_samples_split, min_samples_leaf):
+    # if layer == 0:
+    #     encoding_dic_dir = utils.encoding_dic_dir_0
+    #     model_path = utils.classify_model_path + "model_0.pkl"
+    # elif layer == 1:
+    #     encoding_dic_dir = utils.encoding_dic_dir_1
+    #     model_path = utils.classify_model_path + "model_1.pkl"
+    # elif layer == 2:
+    #     encoding_dic_dir = utils.encoding_dic_dir_2
+    #     model_path = utils.classify_model_path + "model_2.pkl"
+    model_path = utils.classify_model_path + "model.pkl"
+    vec_list = utils.GetVecListFromDic(encoding_dic_dir, name_list)
+    
+    model = RandomForestClassifier(n_estimators=n_estimators, criterion="entropy", max_depth=max_depth, min_samples_split=min_samples_split, 
+                                    min_samples_leaf=min_samples_leaf, max_leaf_nodes=max_leaf_nodes, max_features=None)
+    label_list = utils.GetLabelList(name_list, label_dic)
+    classifier = model.fit(vec_list, label_list)
+    utils.Save_pkl(classifier, model_path)
+    
 
 
 
@@ -92,9 +110,9 @@ if __name__ == '__main__':
     classify_predict_path_0 = classify_predict_path + "classify_predict_0.json"
     classify_predict_path_1 = classify_predict_path + "classify_predict_1.json"
     classify_predict_path_2 = classify_predict_path + "classify_predict_2.json"
-    classify_train_predict_path_0 = classify_predict_path + "classify_train_predict_0.json"
-    classify_train_predict_path_1 = classify_predict_path + "classify_train_predict_1.json"
-    classify_train_predict_path_2 = classify_predict_path + "classify_train_predict_2.json"
+    # classify_train_predict_path_0 = classify_predict_path + "classify_train_predict_0.json"
+    # classify_train_predict_path_1 = classify_predict_path + "classify_train_predict_1.json"
+    # classify_train_predict_path_2 = classify_predict_path + "classify_train_predict_2.json"
 
     classify_model_path = utils.classify_model_path
     classify_model_path_0 = classify_model_path + "model_0.pkl"
@@ -110,18 +128,13 @@ if __name__ == '__main__':
     layer_1 = "1"
     layer_2 = "2"
 
-    if use_all_methods:
-        RandomForest(layer_0, embedded_dir_0, train_name_list, test_name_list, train_label_list, test_label_list, 
-                    classify_predict_path_0, classify_train_predict_path_0, classify_model_path_0, importance_path_0, 
-                    max_depth=None, max_leaf_nodes=40, min_samples_split=40, min_samples_leaf=1)
-        RandomForest(layer_1, embedded_dir_1, train_name_list, test_name_list, train_label_list, test_label_list, 
-                    classify_predict_path_1, classify_train_predict_path_1, classify_model_path_1, importance_path_1, 
-                    max_depth=None, max_leaf_nodes=80, min_samples_split=20, min_samples_leaf=1)
-        RandomForest(layer_2, embedded_dir_2, train_name_list, test_name_list, train_label_list, test_label_list, 
-                    classify_predict_path_2, classify_train_predict_path_2, classify_model_path_2, importance_path_2, 
-                    max_depth=None, max_leaf_nodes=120, min_samples_split=10, min_samples_leaf=1)
-    else:
-        RandomForest(layer_0, embedded_dir_0, train_name_list, test_name_list, train_label_list, test_label_list, classify_predict_path_0, classify_train_predict_path_0, classify_model_path_0, importance_path_0, max_depth=3, max_leaf_nodes=30, min_samples_split=3, min_samples_leaf=1)
-        RandomForest(layer_1, embedded_dir_1, train_name_list, test_name_list, train_label_list, test_label_list, classify_predict_path_1, classify_train_predict_path_1, classify_model_path_1, importance_path_1, max_depth=4, max_leaf_nodes=30, min_samples_split=3, min_samples_leaf=1)
-        RandomForest(layer_2, embedded_dir_2, train_name_list, test_name_list, train_label_list, test_label_list, classify_predict_path_2, classify_train_predict_path_2, classify_model_path_2, importance_path_2, max_depth=None, max_leaf_nodes=30, min_samples_split=3, min_samples_leaf=1)
- 
+    RandomForest(layer_0, embedded_dir_0, train_name_list, test_name_list, train_label_list, test_label_list, 
+                classify_predict_path_0, classify_model_path_0, importance_path_0, 
+                max_depth=None, max_leaf_nodes=40, min_samples_split=40, min_samples_leaf=1)
+    RandomForest(layer_1, embedded_dir_1, train_name_list, test_name_list, train_label_list, test_label_list, 
+                classify_predict_path_1, classify_model_path_1, importance_path_1, 
+                max_depth=None, max_leaf_nodes=80, min_samples_split=20, min_samples_leaf=1)
+    RandomForest(layer_2, embedded_dir_2, train_name_list, test_name_list, train_label_list, test_label_list, 
+                classify_predict_path_2, classify_model_path_2, importance_path_2, 
+                max_depth=None, max_leaf_nodes=120, min_samples_split=10, min_samples_leaf=1)
+

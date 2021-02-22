@@ -123,6 +123,13 @@ def GetVecList(dir, name_list):
         vec_list.append(vector)
     return vec_list
 
+def GetVecListFromDic(dir, name_list):
+    vec_list = []
+    for name in name_list:
+        vector = ReadJson(dir)[name]
+        vec_list.append(vector)
+    return vec_list
+
 def GetLabelList(name_list, label_dic):
     label_list = []
     for name in name_list:
