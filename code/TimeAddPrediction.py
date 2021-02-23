@@ -2,6 +2,23 @@ import csv
 import utils
 import sys
 
+def GeneratePrediction(name_list_path, time_predict, layer, method):
+    name_list = utils.ReadJson(name_list_path)
+    title = "filename,predict"
+    data = []
+    for name in name_list:
+        line = []
+        line.append(name)
+        line.append(str(time_predict[name_list.index(name)]))
+        data.append(line)
+    with open(utils.time_predict_path + "predict_" + method + "_" + str(layer) + ".csv", "w") as writer:
+        writer.write(title + "\n")
+        for line in data:
+            writer.write(",".join(line) + "\n")
+
+
+
+
 if __name__ == '__main__':
     time_predict_path = utils.time_predict_path
     time_predict_path_0 = time_predict_path + "time_predict_0.json"

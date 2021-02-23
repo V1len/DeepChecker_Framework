@@ -2,17 +2,16 @@ from sklearn.ensemble import RandomForestRegressor
 import utils
 import os
 import numpy as np
-import pydotplus
 from sklearn import tree
 np.seterr(divide='ignore',invalid='ignore')
 
 from sklearn.model_selection import GridSearchCV
 from sklearn import metrics
 
-def GetTimeList(name_list, time_message, method):
+def GetTimeList(name_list, time_message_dic, method):
     time_list = []
     for name in name_list:
-        time = time_message[name][method]
+        time = time_message_dic[name][method]
         time_list.append(time)
     return time_list
 
@@ -34,17 +33,42 @@ def RandomForest(embedded_dir, train_name_list, test_name_list, train_time_messa
 
         print("Traing Score:%f" % model.score(train_vec_list, train_time_list))
         print("Testing Score:%f" % model.score(test_vec_list, test_time_list))
-        # trees = model.estimators_
-        # dot_data = tree.export_graphviz(trees[0],
-        #                         out_file = None,
-        #                         feature_names = list(range(len(train_vec_list[0]))),
-        #                         class_names = train_time_list,
-        #                         filled = True,
-        #                         rounded = True
-        #                        )
-        # graph = pydotplus.graph_from_dot_data(dot_data)
-        # graph.write_pdf(utils.time_result_path + method + "_" + layer + ".pdf")
+
     utils.WriteJson(time_predict_message, time_predict_path)
+
+def TimePredict(name_list, time_dic, layer, n_estimators, max_depth, max_leaf_nodes, min_samples_split, min_samples_leaf, method):
+    if layer == 0:
+        encoding_dic_dir = utils.encoding_dic_dir_0
+        model_path = utils.time_model_path + "model_" + method + "_0.pkl"
+    elif layer == 1:
+        encoding_dic_dir = utils.encoding_dic_dir_1
+        model_path = utils.time_model_path + "model_" + method + "_1.pkl"
+    elif layer == 2:
+        encoding_dic_dir = utils.encoding_dic_dir_2
+        model_path = utils.time_model_path + "model_" + method + "_2.pkl"
+    vec_list = utils.GetVecListFromDic(encoding_dic_dir, name_list)
+    model = RandomForestRegressor(n_estimators=n_estimators, criterion="mae", max_depth=max_depth, min_samples_split=min_samples_split,
+                                    min_samples_leaf=min_samples_leaf, max_leaf_nodes=max_leaf_nodes, max_features=None)
+
+    time_list = utils.GetTimeList(name_list, time_dic)
+    classifier = model.fit(vec_list, time_list)
+    utils.Save_pkl(classifier, model_path)
+
+def Predict(name_list_path, model_path, layer, method):
+    name_list = utils.ReadJson(name_list_path)
+    if layer == 0:
+        encoding_dic_dir = utils.encoding_dic_dir_0
+    elif layer == 1:
+        encoding_dic_dir = utils.encoding_dic_dir_1
+    elif layer == 2:
+        encoding_dic_dir = utils.encoding_dic_dir_2
+    vec_list = utils.GetVecListFromDic(encoding_dic_dir, name_list)
+    model = utils.Load_pkl(model_path)
+    predict_time_list = model.predict(vec_list)
+    time_predict = predict_time_list.tolist()
+    time_predict_path = utils.time_predict_path + "predict_" + method + "_" + str(layer) + ".json"
+    utils.WriteJson(time_predict, time_predict_path)
+    return time_predict
 
 
 if __name__ == '__main__':

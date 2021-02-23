@@ -5,7 +5,7 @@ import utils
 def SplitData(data_path, train_data_path, test_data_path):
     with open(data_path, "r") as csvfile:
         data = list(csv.reader(csvfile))
-        print(len(data))
+        print(len(data) - 1)
     title = data[0]
     new_data = data[1:]
 
@@ -26,8 +26,8 @@ def SplitData(data_path, train_data_path, test_data_path):
 if __name__ == '__main__':
     classify_basic_data_path = utils.classify_basic_data_path
 
-    data_path = classify_basic_data_path + "classify_data.csv"
-    train_data_path = classify_basic_data_path + "classify_train_data.csv"
-    test_data_path = classify_basic_data_path + "classify_test_data.csv"
+    data_path = classify_basic_data_path + "data.csv"
+    train_data_path = classify_basic_data_path + "train_data.csv"
+    test_data_path = classify_basic_data_path + "test_data.csv"
 
     SplitData(data_path, train_data_path, test_data_path)

@@ -242,7 +242,7 @@ if __name__ == '__main__':
     # iimc_benchmark_path = utils.iimc_benchmark_path
     # hwmcc_clean_path = utils.hwmcc_clean_path
 
-    data_path = utils.classify_basic_data_path + "classify_data.csv"
+    data_path = utils.classify_basic_data_path + "data.csv"
     ProcessData(AVY_dprove_path, pdr_IC3_path, others_path, data_path)
 
     # train_path = utils.classify_basic_data_path + "train_data.csv"

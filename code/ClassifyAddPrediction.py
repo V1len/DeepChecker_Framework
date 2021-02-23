@@ -95,24 +95,39 @@ def ClassifyAddPrediction(data_path, name_list_path, predict_data_path,
         for line in data:
             writer.write(",".join(line) + "\n")
 
+def GeneratePrediction(name_list_path, classify_predict, layer):
+    name_list = utils.ReadJson(name_list_path)
+    title = "filename,predict"
+    data = []
+    for name in name_list:
+        line = []
+        line.append(name)
+        line.append(classify_predict[name][0])
+        data.append(line)
+    with open(utils.classify_predict_path + "predict_" + str(layer) + ".csv", "w") as writer:
+        writer.write(title + "\n")
+        for line in data:
+            writer.write(",".join(line) + "\n")
+
+
 
 if __name__ == '__main__':
     classify_predict_path = utils.classify_predict_path
     classify_predict_path_0 = classify_predict_path + "classify_predict_0.json"
     classify_predict_path_1 = classify_predict_path + "classify_predict_1.json"
     classify_predict_path_2 = classify_predict_path + "classify_predict_2.json"
-    classify_train_predict_path_0 = classify_predict_path + "classify_train_predict_0.json"
-    classify_train_predict_path_1 = classify_predict_path + "classify_train_predict_1.json"
-    classify_train_predict_path_2 = classify_predict_path + "classify_train_predict_2.json"
+    # classify_train_predict_path_0 = classify_predict_path + "classify_train_predict_0.json"
+    # classify_train_predict_path_1 = classify_predict_path + "classify_train_predict_1.json"
+    # classify_train_predict_path_2 = classify_predict_path + "classify_train_predict_2.json"
     
 
     classify_basic_data_path = utils.classify_basic_data_path
     test_name_list_path = classify_basic_data_path + "test_name_list.json"
     test_data_path = classify_basic_data_path + "test_data.csv"
     predict_data_path = classify_basic_data_path + "classify_predict_data.csv"
-    train_name_list_path = classify_basic_data_path + "train_name_list.json"
-    train_data_path = classify_basic_data_path + "train_data.csv"
-    train_predict_data_path = classify_basic_data_path + "classify_train_predict_data.csv"
+    # train_name_list_path = classify_basic_data_path + "train_name_list.json"
+    # train_data_path = classify_basic_data_path + "train_data.csv"
+    # train_predict_data_path = classify_basic_data_path + "classify_train_predict_data.csv"
 
     # print("train")
     # ClassifyAddPrediction(train_data_path, train_name_list_path, train_predict_data_path, 

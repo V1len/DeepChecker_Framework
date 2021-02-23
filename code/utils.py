@@ -2,12 +2,9 @@ import json
 import pickle
 import os
 
-use_all_methods = True
 
-if use_all_methods:
-    method_list = ["dprove", "pdr", "iimc", "IC3"]
-else:
-    method_list = ["iimcbw", "iimcfw", "iimcic3", "iimcic3lr"]
+method_list = ["dprove", "pdr", "iimc", "IC3"]
+
 
 encoding_layer_list = ["0-depth Encoding", "1-depth Encoding", "2-depth Encoding"]
 
@@ -138,6 +135,13 @@ def GetLabelList(name_list, label_dic):
         label = method_list.index(aig_label)
         label_list.append(label)
     return label_list
+
+def GetTimeList(name_list, label_dic):
+    time_list = []
+    for name in name_list:
+        time = label_dic[name]
+        time_list.append(time)
+    return time_list
 
 def NameMap(name):
     dic = {"pdr": "ABC-pdr", "dprove": "ABC-dprove", "iimc": "IImc", "IC3": "IC3ref"

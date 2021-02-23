@@ -22,15 +22,15 @@ def GeneratePredictResult(test_name_list, predict_label_list, classify_predict_p
     utils.WriteJson(classify_predict, classify_predict_path)
 
 
-    method_list = utils.method_list
-    choose_top_method_number = utils.choose_top_method_number_1
-    for i in range(choose_top_method_number):
-        top_i_method_dic = {}
-        for j in range(len(test_name_list)):
-            test_name = test_name_list[j]
-            top_i_method_dic[test_name] = classify_predict[test_name][i]
-        statistic_dic = utils.Statistic([top_i_method_dic])
-        print(statistic_dic)
+    # method_list = utils.method_list
+    # choose_top_method_number = utils.choose_top_method_number_1
+    # for i in range(choose_top_method_number):
+    #     top_i_method_dic = {}
+    #     for j in range(len(test_name_list)):
+    #         test_name = test_name_list[j]
+    #         top_i_method_dic[test_name] = classify_predict[test_name][i]
+    #     statistic_dic = utils.Statistic([top_i_method_dic])
+    #     print(statistic_dic)
 
     return classify_predict
 
@@ -64,16 +64,15 @@ def RandomForest(layer, embedded_dir, train_name_list, test_name_list, train_lab
     classify_predict = GeneratePredictResult(test_name_list, predict_label_list, classify_predict_path)
 
 def Classify(name_list, label_dic, layer, n_estimators, max_depth, max_leaf_nodes, min_samples_split, min_samples_leaf):
-    # if layer == 0:
-    #     encoding_dic_dir = utils.encoding_dic_dir_0
-    #     model_path = utils.classify_model_path + "model_0.pkl"
-    # elif layer == 1:
-    #     encoding_dic_dir = utils.encoding_dic_dir_1
-    #     model_path = utils.classify_model_path + "model_1.pkl"
-    # elif layer == 2:
-    #     encoding_dic_dir = utils.encoding_dic_dir_2
-    #     model_path = utils.classify_model_path + "model_2.pkl"
-    model_path = utils.classify_model_path + "model.pkl"
+    if layer == 0:
+        encoding_dic_dir = utils.encoding_dic_dir_0
+        model_path = utils.classify_model_path + "model_0.pkl"
+    elif layer == 1:
+        encoding_dic_dir = utils.encoding_dic_dir_1
+        model_path = utils.classify_model_path + "model_1.pkl"
+    elif layer == 2:
+        encoding_dic_dir = utils.encoding_dic_dir_2
+        model_path = utils.classify_model_path + "model_2.pkl"
     vec_list = utils.GetVecListFromDic(encoding_dic_dir, name_list)
     
     model = RandomForestClassifier(n_estimators=n_estimators, criterion="entropy", max_depth=max_depth, min_samples_split=min_samples_split, 
@@ -81,7 +80,25 @@ def Classify(name_list, label_dic, layer, n_estimators, max_depth, max_leaf_node
     label_list = utils.GetLabelList(name_list, label_dic)
     classifier = model.fit(vec_list, label_list)
     utils.Save_pkl(classifier, model_path)
-    
+
+def Predict(name_list_path, model_path, layer):
+    name_list = utils.ReadJson(name_list_path)
+    if layer == 0:
+        encoding_dic_dir = utils.encoding_dic_dir_0
+    elif layer == 1:
+        encoding_dic_dir = utils.encoding_dic_dir_1
+    elif layer == 2:
+        encoding_dic_dir = utils.encoding_dic_dir_2
+    vec_list = utils.GetVecListFromDic(encoding_dic_dir, name_list)
+    model = utils.Load_pkl(model_path)
+    predictions = model.predict_proba(vec_list)
+    predict_label_list = np.argsort(-predictions, axis=1)
+    classify_predict_path = utils.classify_predict_path + "predict_" + str(layer) + ".json"
+    classify_predict = GeneratePredictResult(name_list, predict_label_list, classify_predict_path)
+    return classify_predict
+
+
+
 
 
 
